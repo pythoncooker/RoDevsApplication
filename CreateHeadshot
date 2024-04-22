@@ -1,0 +1,70 @@
+local sss = game:GetService("ServerScriptService")
+
+local function create(char)
+	local clone = sss.Storage.plrheadshot:Clone()
+	clone.Name = char.Name
+	local find = game.ReplicatedStorage.playerheadshots:FindFirstChild(clone.Name)
+	local load = workspace._load:Clone()
+	load.Parent = workspace
+	local viewchar = clone.Dummy
+	wait(3)
+	for i,v in ipairs(char:GetChildren()) do
+		local v2 = v:Clone()
+		if v2:isA("Shirt") or v2:isA("Pants") or v2:isA("Accessory") or v2:isA("ShirtGraphic") or v2:isA("BodyColors") or v2:isA("CharacterMesh") then
+			v2.Parent = load
+		end
+		if v2.Name == "Head" then
+			for i,v in ipairs(v2:GetChildren()) do
+				if v:isA("Decal") then
+					for i,v in ipairs(viewchar.Head:GetChildren()) do
+						if v:isA("Decal") then
+							v:Destroy()
+						end
+					end
+					v.Parent = viewchar.Head
+				end
+				
+				if v:isA("SpecialMesh") then
+					for i,v in ipairs(viewchar.Head:GetChildren()) do
+						if v:isA("SpecialMesh") then
+							v:Destroy()
+						end
+					end
+					v.Parent = viewchar.Head
+				end
+				
+			end
+		end
+		
+	end
+	
+	wait(5)
+	
+	for i,v in ipairs(load:GetChildren()) do
+		if v:isA("Shirt") or v:isA("Pants") or v:isA("Accessory") or v:isA("ShirtGraphic") or v:isA("BodyColors") or v:isA("CharacterMesh") then
+			v.Parent = viewchar
+		end
+	end
+	
+	load:Destroy()
+	
+	if find then
+		find:Destroy()
+	end
+	
+	clone.Parent = game.ReplicatedStorage.playerheadshots
+end
+
+sss.createheadshot.Event:Connect(create)
+
+game.ReplicatedStorage.playerheadshots.ChildAdded:Connect(function(c)
+	wait(0.1)
+	local c = c.Dummy
+	if c:FindFirstChild("Head") then
+		if not c.Head:FindFirstChild("Mesh") then
+			script.Mesh:Clone().Parent = c:FindFirstChild("Head")
+		end
+	else
+		c:Destroy()
+	end
+end)
